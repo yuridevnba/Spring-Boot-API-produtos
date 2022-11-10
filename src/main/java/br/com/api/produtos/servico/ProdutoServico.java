@@ -13,35 +13,40 @@ import br.com.api.produtos.repositorio.ProdutoRepositorio;
 
 @Service
 public class ProdutoServico {
-	
+
 	@Autowired
 	private ProdutoRepositorio pr;
 	@Autowired
 	private RespostaModelo rm;
-	
+
 	// Método para listar todos os produtos
 	// findALL()== select*from produtos
-	public  List<ProdutosModelo> listar(){
+	public List<ProdutosModelo> listar() {
 		return pr.findAll();
 	}
-		// Método para cadastrar ou alterar produtos
-		public ResponseEntity<?>cadastrarAlterar(ProdutosModelo pm,String acao){
-			if(pm.getNome().equals("")) {
-				rm.setMensagem("O nome do produto é obrigatório!");
-				return new ResponseEntity<RespostaModelo>(rm,HttpStatus.BAD_REQUEST);
-			}else if(pm.getMarca().equals("")) {
-				rm.setMensagem("O nome da marca é obrigatório!");
-				return new ResponseEntity<RespostaModelo>(rm,HttpStatus.BAD_REQUEST);
-			}else {
-				if(acao.equals("cadastrar")) {
-					return new ResponseEntity<ProdutosModelo>(pr.save(pm),HttpStatus.CREATED);
-				}else {
-					return new ResponseEntity<ProdutosModelo>(pr.save(pm),HttpStatus.OK);
-				}
-				
-			
-		
-			}
-	}
 
+	// Método para cadastrar ou alterar produtos
+	public ResponseEntity<?> cadastrarAlterar(ProdutosModelo pm, String acao) {
+		if (pm.getNome().equals("")) {
+			rm.setMensagem("O nome do produto é obrigatório!");
+			return new ResponseEntity<RespostaModelo>(rm, HttpStatus.BAD_REQUEST);
+		} else if (pm.getMarca().equals("")) {
+			rm.setMensagem("O nome da marca é obrigatório!");
+			return new ResponseEntity<RespostaModelo>(rm, HttpStatus.BAD_REQUEST);
+		} else {
+			if (acao.equals("cadastrar")) {
+				return new ResponseEntity<ProdutosModelo>(pr.save(pm), HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<ProdutosModelo>(pr.save(pm), HttpStatus.OK);
+			}
+
+		}
+	}
+    // Método para remover produtos
+	public ResponseEntity<RespostaModelo>remover(long codigo){
+		pr.deleteById(codigo);
+		rm.setMensagem("O produto foi removido com sucesso!");
+		return new ResponseEntity<RespostaModelo>(rm,  HttpStatus.OK);
+		
+	}
 }
